@@ -229,3 +229,182 @@ Once monotonicity is gone:
 > Window validity can be restored by shrinking, and shrinking always moves the state toward validity.
 
 > Sliding window is valid when fixing a violation is guaranteed to move the system closer to validity.
+
+## Prefix Sum
+
+> The escape hatch when monotonicity breaks.
+
+Sliding window fails because:
+- Expanding or shrinking is unpredictable
+
+So instead of adjusting a window, we do this:
+
+> “Can I answer any range-sum question in O(1)?”
+
+That’s the birth of prefix sum.
+
+Prefix sum array:
+
+```
+prefix[i] = sum of elements from 0 to i
+```
+
+then:
+
+```
+sum(i → j) = prefix[j] - prefix[i - 1]
+```
+
+> When control flow becomes messy, precompute state.
+
+### Problem
+
+> Given an array (can contain negatives), find the number of subarrays with sum = k
+
+### Brute force
+
+Check all (i, j):
+- O(n²)
+- Recomputes sums repeatedly
+- Zero reuse of information
+
+### Optimization
+
+**Step A**: What we are really trying to count?
+
+> “Number of continuous subarrays whose sum = k”
+
+This means:
+- Many answers can exist
+- We’re not looking for one window
+- We’re counting relationships between indices
+
+Already this tells us:
+- Sliding window is suspicious
+- We’re not optimizing length or position
+
+**Step B**: Rephrase the problem
+
+Instead of:
+
+> “Which subarrays have sum = k?”
+
+Ask:
+
+> “For every index j, how many subarrays ENDING at j have sum = k?”
+
+This is a very powerful reframing.
+
+Why this helps:
+- Any subarray has exactly one ending index
+- If we count correctly per j, total count is the sum
+
+**Step C**: Focus on ONE ending index
+
+Fix `j`. A subarray ending at `j` can start at:
+
+```
+0, 1, 2, ..., j
+```
+
+Let’s say one such subarray starts at `i`.
+
+Then:
+```
+sum(i → j) = k
+```
+
+**Step D**: Replace “range sum” with something simpler
+
+Computing sum(i → j) directly is hard.
+
+So we ask:
+
+> “Can I express sum(i → j) using something I already know?”
+
+If I knew:
+- Sum from 0 → j
+- Sum from 0 → i-1
+
+Then:
+```
+sum(i → j) = sum(0 → j) - sum(0 → i-1)
+```
+
+**Step E**: The key equation appears
+From:
+```
+sum(i → j) = k
+```
+
+Substitute:
+```
+prefix[j] - prefix[i-1] = k
+```
+
+Rearrange:
+```
+prefix[i-1] = prefix[j] - k
+```
+
+#### Big Realization
+This equation `prefix[i-1] = prefix[j] - k` says:
+
+- To form a valid subarray ending at j,
+- I don’t need to know i.
+- I only need to know whether a prefix sum equal to
+- prefix[j] - k has ever occurred before.
+
+**Step F**: What information do I need while scanning?
+
+Now imagine scanning from left to right.
+
+At index j, you know:
+- `prefix[j]`
+
+To answer:
+> “How many valid subarrays end here?”
+
+You need to know:
+- How many times `prefix[j] - k` appeared before
+
+**Step G**: Why a Hash map?
+
+We need a structure that can:
+- Store all past prefix sums
+- Answer: “How many times have I seen X?”
+
+That is literally:
+
+```
+value → frequency
+```
+
+- No array index.
+- No window.
+- No pointers.
+
+Just history lookup.
+
+### Take away
+
+> Sliding window asks:
+“Can I fix things by moving boundaries?”
+
+> Prefix sum asks:
+“Have I seen the right state before?”
+
+> Prefix sum + hashmap works because instead of adjusting a window, we rely on previously seen state.
+
+## Sliding window vs Prefix sum
+
+Sliding window:
+- Assumes the future can be fixed by moving boundaries
+- Needs monotonic behavior
+
+Prefix sum + hashmap:
+- Accepts that movement is unsafe
+- So it records history
+- And checks relationships between past and present states
+
+This is why it survives negatives.
