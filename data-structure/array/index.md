@@ -408,3 +408,56 @@ Prefix sum + hashmap:
 - And checks relationships between past and present states
 
 This is why it survives negatives.
+
+### Prefix sum variations -
+
+#### Variant 1
+> Given an array, find longest subarray whose sum = k.
+
+Test case - 5, 3, -4, 8, 9, -11, 0, 4, -2, 7
+
+Test case
+
+Array -  5 3 -4 8 9 -11 0 4 -2 7
+Prefix - 5 8 4 12 21 10 10 14 12 19
+Prefix-[j] = 3 6 2 10 19 8 8 12 10 17
+
+#### Variant 2
+> Longest subarray with equal number of 0s and 1s
+
+#### Variant 3
+> Subarray with sum divisible by k
+
+## Pattern Summary
+
+| Goal             | Store in Map       |
+| ---------------- | ------------------ |
+| Count subarrays  | Frequency          |
+| Longest subarray | First index        |
+| Divisibility     | Remainder state    |
+| Balanced binary  | Transformed prefix |
+
+
+✅ Longest subarray
+
+> We store the first occurrence because, for a fixed ending index, the earliest start gives the maximum length.
+Any later occurrence would only shorten the subarray.
+
+✅ Counting subarrays
+
+> We store frequency because every occurrence of a matching prefix sum represents a distinct valid subarray, and all of them must be counted.
+
+| Objective  | What matters       | What to store |
+| ---------- | ------------------ | ------------- |
+| Count      | How many ways      | Frequency     |
+| Max length | Farthest distance  | First index   |
+| Min length | Closest distance   | Last index    |
+| Existence  | Whether any exists | Boolean       |
+
+
+## Recap 
+
+- State-based thinking (Kadane)
+- Boundary-based thinking (Sliding Window)
+- History-based thinking (Prefix Sum + Hash)
+- Goal-driven storage (Frequency vs First Index)
