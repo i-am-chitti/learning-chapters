@@ -461,3 +461,120 @@ Any later occurrence would only shorten the subarray.
 - Boundary-based thinking (Sliding Window)
 - History-based thinking (Prefix Sum + Hash)
 - Goal-driven storage (Frequency vs First Index)
+
+## Two Pointers
+
+Two pointers is not a technique about windows.
+It is a technique about relationships between two positions.
+
+Core idea - 
+> Use two indices that move based on a condition involving both of them.
+
+### Instinct
+
+Two pointers works best when:
+- The array is sorted, OR
+- You are comparing pairs / distances / opposites, OR
+- Movement of one pointer gives information about the other
+
+Mental trigger:
+
+> “Can I make progress by moving only one side at a time based on comparison?”
+
+If yes → two pointers.
+
+### Example
+
+> Given a sorted array, check if there exists a pair with sum = k.
+
+Two pointer thinking
+- Left at smallest
+- Right at largest
+- Compare sum
+
+Sorted array guarantees:
+- Moving left → increases sum
+- Moving right → decreases sum
+
+This is monotonic behavior, but note carefully:
+
+⚠️ This monotonicity comes from sorting,
+not from window constraints.
+
+
+### Two Pointers vs Sliding Window
+
+| Aspect                  | Sliding Window | Two Pointers |
+| ----------------------- | -------------- | ------------ |
+| Needs continuity        | ✅              | ❌            |
+| Needs sorted array      | ❌              | ✅ (usually)  |
+| Uses validity invariant | ✅              | ❌            |
+| Boundary fixing logic   | Mandatory      | Optional     |
+| Handles negatives       | Sometimes ❌    | Often ✅      |
+
+
+### Tricky case: negatives (important)
+Question:
+> Can two pointers work with negatives?
+
+Yes — if the array is sorted.
+
+Why?
+- Order restores predictability
+- Pointer movement remains directional
+
+Sliding window failed with negatives because order was arbitrary.
+
+### Classic Two Pointer Variants
+1. Remove duplicates from sorted array
+  
+→ One pointer reads, one writes
+
+2. Reverse a string / array
+
+→ Left + right swap
+
+3. Container with most water
+
+→ Width vs height trade-off
+
+4. 3-sum / 4-sum
+
+→ Fix one, apply two pointers on rest
+
+### Principle
+> Two pointers is about exploiting order.
+Sliding window is about maintaining validity.
+
+
+## Recap
+
+> Greedy boundary movement is only safe when the state changes monotonically.
+
+Where monotonicity comes from:
+- Kadane → local optimal substructure
+- Sliding Window → non-negative constraints
+- Two Pointers → sorted order
+- Prefix Sum → removes boundary movement entirely
+
+## Decision Table
+
+| Problem property             | Technique         |
+| ---------------------------- | ----------------- |
+| Continuous + monotonic state | Sliding Window    |
+| Continuous + non-monotonic   | Prefix Sum + Hash |
+| Pair / distance + sorted     | Two Pointers      |
+| Best / worst ending here     | Kadane            |
+| No safe greedy movement      | Store history     |
+
+
+## Problems
+
+| # | Problem | Difficulty | Status |
+|---|---------|------------|--------|
+| 1 | [Two Sum](https://leetcode.com/problems/two-sum/) | Easy | [ ] |
+| 2 | [Valid Palindrome](https://leetcode.com/problems/valid-palindrome/) | Easy | [ ] |
+| 3 | [Two Sum II](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/) | Medium | [ ] |
+| 4 | [3Sum](https://leetcode.com/problems/3sum/) | Medium | [ ] |
+| 5 | [Container With Most Water](https://leetcode.com/problems/container-with-most-water/) | Medium | [ ] |
+| 6 | [Trapping Rain Water](https://leetcode.com/problems/trapping-rain-water/) | Hard | [ ] |
