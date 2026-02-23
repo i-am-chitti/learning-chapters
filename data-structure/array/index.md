@@ -416,6 +416,8 @@ This is why it survives negatives.
 
 Test case - 5, 3, -4, 8, 9, -11, 0, 4, -2, 7
 
+k=2
+
 Test case
 
 Array -  5 3 -4 8 9 -11 0 4 -2 7
