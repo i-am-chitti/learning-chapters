@@ -850,3 +850,130 @@ Let’s outline the algorithm clearly (Kahn’s algorithm intuition form):
    - Processed nodes == total nodes → DAG
    - Else → cycle exists
 
+#### Questions
+
+> consider this DAG:
+> 
+> 1 → 3
+> 
+> 2 → 3
+> 
+> 3 → 4
+>
+> Questions:
+>
+> How many possible topological orderings exist?
+>
+> Is the ordering unique?
+>
+> At which step does branching occur?
+
+the topological ordering is - 1,2,3,4 
+2,1,3,4
+
+Topological ordering is not unique.
+It has branching.
+
+> Uniqueness condition:
+>
+> At every step of Kahn’s algorithm,
+> there must be exactly one node with indegree 0.
+>
+> The moment you see more than one → multiple valid orderings.
+
+#### Question
+
+> 1 → 2
+> 
+> 1 → 3
+> 
+> 2 → 4
+> 
+> 3 → 4
+>
+> Questions:
+>
+> How many topological orderings exist?
+>
+> Is the order unique?
+>
+> At which step does branching occur?
+
+there are two topological ordering existing. Order is not unique. 1,2,3,4 1,3,2,4 Branching occurs at time when there are two nodes 2,3 both have indegree = 0. Actually, second step once node 1 is processed. At first step, single node with indegree =0. Then, 2,3. Now, we've two paths, if we select 2 first, we get 1,2,3,4. Else, 1,3,2,4.
+
+
+#### Linear Chain / Directed Path
+
+> Suppose a DAG has:
+>
+> Exactly n nodes
+>
+> Exactly n - 1 edges
+>
+> And topological ordering is unique.
+>
+> What must be true about the structure of this graph?
+
+n nodes and n-1 edges with topological ordering as unique => at each step, we're getting a single node with indegree = 0. No branching occurred. 
+
+It means direction from a start node goes straight to end/last node. There exists a path. I don't recall the exact graph name but I can visualize it. 1 -> 2 -> 3 -> 4 -> 5 5 nodes and 4 edges
+
+So, it's a linear chain or a directed path.
+
+```
+v1 → v2 → v3 → v4 → ... → vn
+```
+
+Given:
+- n nodes
+- n - 1 edges
+- DAG
+- Unique topological ordering
+
+We deduced:
+- No branching allowed.
+- Exactly one node has indegree 0 at every step.
+- Every node (except first) has indegree 1.
+- Every node (except last) has outdegree 1.
+
+A single straight chain.
+
+#### DAG vs Linear Chain
+
+**1️⃣ Does every DAG have n - 1 edges?**
+
+No.
+
+That condition came from the specific constraint in the previous problem.
+
+A DAG can have:
+- 0 edges
+- 1 edge
+- n - 1 edges
+- Much more than n - 1 edges
+
+**2️⃣ Does every DAG have unique topological ordering?**
+
+Also ❌ No.
+
+Most DAGs do NOT have unique ordering.
+
+**3️⃣ When Is Topological Order Unique?**
+
+> A DAG has a unique topological ordering
+iff at every step exactly one node has indegree 0
+
+This enforces:
+
+> The DAG must be a directed path.
+
+Directed path is a special DAG.
+
+
+```
+Directed Graph
+    ├── DAG
+    │     ├── DAG with unique topo order (directed path)
+    │     └── General DAG (many valid topo orders)
+    └── Cyclic Directed Graph
+```
